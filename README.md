@@ -1,4 +1,4 @@
-# MRR-ESP32-RFID
+# MRR-RFID-ESP32
 
 Emulates MERG Concentrator for RFID communication with JMRI over WiFi
 ### *** ESP32 board manager 2.0.8: REQUIRED MODIFICATION TO MFRC522.cpp:change F("x") when occurring in return statements to ((__FlashStringHelper *) "x") or upgrade to 2.0.9
