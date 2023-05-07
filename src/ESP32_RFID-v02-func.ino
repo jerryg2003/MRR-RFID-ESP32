@@ -78,7 +78,7 @@ uint8_t InitiateRFIDReaders ()      {
 
   // Blink the LED to indicate the number of detected readers
   pinMode(LED_BUILTIN, OUTPUT);
-  for (int ii = 0; ii < numReaders; ii++) {
+  for (int ii = 0; ii < numPossibleReaders; ii++) {
     if (readers[ii].isConnected) {
       digitalWrite(LED_BUILTIN, HIGH);
       delay(500);
