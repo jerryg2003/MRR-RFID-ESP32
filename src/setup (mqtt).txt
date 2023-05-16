@@ -1,0 +1,29 @@
+16:23:28.333 -> 
+16:23:28.333 -> -v04a- Compiled on: May 16 2023 16:23:00
+16:23:28.379 -> 
+16:23:28.379 -> ** setup() running on core 1
+16:23:28.379 -> ** Connecting to Wifi as ESP32-RFID01-XXX  MAC: XXX
+16:23:28.988 -> ....
+16:23:30.489 -> ** Connected to XXX  on IP address: XXX
+16:23:30.489 -> ** Start MDNS 
+16:23:30.489 -> ** Connecting to MQTT
+16:23:33.577 ->     Looking for MQTT Broker broadcast IP
+16:23:33.577 -> *** Broker IP broadcast: XXX on IP XXX
+16:23:33.762 -> ** MQTT connected to: XXX
+16:23:33.807 -> ** MQTT Resets and Subscriptions
+16:23:33.807 ->     Reset MQTT object: trains/Jstat/$state
+16:23:33.807 ->     Reset MQTT object: trains/Jsend/lt/E32-RFID01/ACT
+16:23:33.807 ->     Reset MQTT object: trains/Jrecv/sens/E32-RFID01/ACK
+16:23:33.807 ->     Reset MQTT object: trains/Jdisp/mem/E32-RFID01/IP
+16:23:33.853 ->     Subscribing to trains/Jstat/#
+16:23:33.853 ->     Subscribing to trains/Jsend/lt/E32-RFID01/#
+16:23:33.901 ->     Subscribing to trains/Jdisp/mem/E32-RFID01/#
+16:23:34.089 -> ** Initialize Readers
+16:23:34.089 ->     Default MOSI: 23  Default MISO: 19  Default SCK: 18
+16:23:34.694 ->     Reader A detected on SS pin 17
+16:23:35.323 ->     Reader B detected on SS pin 16
+16:23:35.925 ->     Reader C detected on SS pin 5
+16:23:35.925 -> ** Number of readers detected: 3 EQUAL 3 readers expected
+16:23:38.312 -> *** SETUP COMPLETE ***
+16:24:27.193 -> ** JMRI READY Received: 255
+16:25:44.053 -> ** JMRI NOT READY Received: 255

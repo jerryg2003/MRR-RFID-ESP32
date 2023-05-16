@@ -1,0 +1,15 @@
+16:18:49.752 -> *** ESP32RFID 2023-05-16 1630
+16:18:49.752 -> -v04a- Compiled on: May 16 2023 16:18:33
+16:18:49.752 -> 
+16:18:49.752 -> ** setup() running on core 1
+16:18:49.752 -> ** NO EXTERNAL COMMUNICATION SELECTED **
+16:18:49.752 -> ** Initialize Readers
+16:18:49.752 ->     Default MOSI: 23  Default MISO: 19  Default SCK: 18
+16:18:50.357 ->     Reader A detected on SS pin 17
+16:18:50.921 ->     Reader B detected on SS pin 16
+16:18:51.555 ->     Reader C detected on SS pin 5
+16:18:51.555 -> ** Number of readers detected: 3 EQUAL 3 readers expected
+16:18:53.955 -> *** SETUP COMPLETE ***
+16:19:03.306 -> Communication methods: None. Tag: tagIDString: 53e47d34fe checksum: FE
+16:19:09.103 -> Communication methods: None. Tag: tagIDString: 53e47d34fe checksum: FE
+16:19:11.140 -> Communication methods: None. Tag: tagIDString: 53e47d34fe checksum: FE
