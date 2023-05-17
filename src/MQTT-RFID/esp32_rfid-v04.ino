@@ -4,8 +4,8 @@
 /* *** If ESP Board manager 2.0.8: REQUIRED MODIFICATION TO MFRC522.cpp:
         change F("x") when occurring in return statements to ((__FlashStringHelper *) "x")
        If ESP Board manager 2.0.9: No change necessary
-   *** If using MQTT Connection to JMRI (uncomment #define JMRIMQTT below): 
-         Set up reporter, sensor, and memory for each reader
+   *** If using MQTT Connection to JMRI (uncomment #define JMRIMQTT below):
+         Set up reporter, sensor, and memory for each reader (my current panel v52f or later)
          JMRI will automatically create IDTags when it see them
          Need to coordinate with JMRI MQTTMemory.jy script (v51 or later)
          Start MQTT broker on same network; start MDNS broadcast "_mqtt" name on same network (or directly input IP address of broker)
@@ -23,8 +23,8 @@
 
 //***Version History at bottom of file
 
-#define VERSION "*** ESP32RFID 2023-05-16 1630"         //Version info printed during setup
-#define VERSIONNUM "-v04a-"
+#define VERSION "*** ESP32RFID 2023-05-17 1330"         //Version info printed during setup
+#define VERSIONNUM "-v04b-"
 #ifdef ESP32
 const char compileDate[] = __DATE__ " " __TIME__;
 #define LED_BUILTIN 2
@@ -36,7 +36,7 @@ const char compileDate[] = __DATE__ " " __TIME__;
       Define Sensors in JMRI with system name format "[MQTTClientID/[ReaderID|0]"
       For example, Reporter: MRE32-E32-RFID01/A and Sensor: MSE32-RFID01/A  and Memory: M.E32-RFID01/A (for specific reader)
       Also:        Sensors: MSE32-E32-RFID01/ACK (acknowledge receipt of activate Light)
-                   Sensors: MSE32-E32-RFID01/HB  (for receipt of heartbeat)            
+                   Sensors: MSE32-E32-RFID01/HB  (for receipt of heartbeat)
                    Lights: MLE32-E32-RFID01/0 (to activate the concentrator)
                    Memory: M.E32-RFID01/IP (for IP address of concentrator)
 
@@ -44,12 +44,16 @@ const char compileDate[] = __DATE__ " " __TIME__;
 */
 
 //***SELECT JMRI Communication Method: comment or uncomment one of the following lines:
-//#define JMRIMQTT                    //If using MQTT connection to JMRI
+#define JMRIMQTT                    //If using MQTT connection to JMRI
 //#define JMRIRFID                    //If using RFID connection to JMRI
 
 //DEBUG: set to true for debugging information
 #define DEBUG false
 #define DEBUGM false                //MQTT debugging info
+
+#if defined(JMRIRFID) & defined(JMRIMQTT)
+#error "BOTH RFID AND MQTT Communication selected. Please uncomment only one."
+#endif
 
 //************** Import Libraries **********************************************************
 #ifdef ESP32
@@ -75,8 +79,8 @@ const unsigned long veryShortWait  = 6;
 const unsigned long oneMin         = 60 * oneSec;
 
 //*************** Wi-Fi credentials *************************************************
-const char* ssid         = "ssid";
-const char* password     = "password";
+const char* ssid         = "G2";
+const char* password     = "GrochowFamily";
 const int   jmriRfidPort = 12099;                              //Make sure JMRI RFID connection (if used) set to this port
 const char* clientName   = "ESP32-RFID01-JXTrains";            // known to wireless network
 
@@ -84,7 +88,7 @@ const char* clientName   = "ESP32-RFID01-JXTrains";            // known to wirel
 //*************** MQTT credentials *************************************************
 uint8_t     mqttBrokerNum   = 0;                               //Keep track of which broker being used
 //If broker found, put it in IP[0];  else try other IP addresses
-IPAddress   mqttBrokerIP[]  = {IPAddress(0, 0, 0, 0), IPAddress(10, 0, 0, 3), IPAddress(192, 168, 0, 121), IPAddress(10, 0, 1, 15), IPAddress(192, 168, 0, 143)};
+IPAddress   mqttBrokerIP[]  = {IPAddress(0, 0, 0, 0), IPAddress(10, 0, 0, 3), IPAddress(192, 168, 0, 118), IPAddress(10, 0, 1, 15), IPAddress(192, 168, 0, 121)};
 uint8_t numBrokerIP = 5;
 const String    mqttClientID            = "E32-RFID01";       //Name assigned to this ESP32 for MQTT {Some MQTT libraries requires char]
 const uint      mqttPort                = 1883;
@@ -113,13 +117,13 @@ bool          mqttBrokerPresent = false;       //Is JMRI connected to MQTT Broke
 //****************** JMRI COMMUNICATION OBJECT (per block) **********************************************
 struct JMRI      {
   uint8_t       JMRILight;                //Light in block n: ready to receive from reader n
-  uint8_t   prevJMRILight;
+  uint8_t   prevJMRILight;                //FUTURE USE
   uint8_t      JMRISensor;                //Linked to reader
-  uint8_t  prevJMRISensor;
+  uint8_t  prevJMRISensor;                //FUTURE USE
   String     JMRIReporter;                //Hold tag string
-  String prevJMRIReporter;
+  String prevJMRIReporter;                //FUTURE USE
   String       JMRIMemory;                //Only one memory per reader at this point
-  String   prevJMRIMemory;
+  String   prevJMRIMemory;                //FUTURE USE
   //Constructor
   JMRI() : JMRILight(0), prevJMRILight(0), JMRISensor(0), prevJMRISensor(0) {}
 };
@@ -141,9 +145,9 @@ bool          jmriClientPresent = false;       //Is JMRI connected to WiFi for R
 
 //******************** RFID Reader Info ***************************************************************
 struct RFIDReader {
-  char id;                                 //Reader ID
-  uint8_t ssPin;                           //System select
-  uint8_t rstPin;                          //Reset
+  char id;                                 //Copied: Reader ID
+  uint8_t ssPin;                           //Copied: System select
+  uint8_t rstPin;                          //Copied: Reset
   MFRC522 mfrc522;
   byte    nuidHex[10];                      //Card ID as read (may be more)
   uint8_t numBytesRead;
@@ -170,7 +174,7 @@ unsigned long int loopStartTime = 0;
 RFIDReader readers[numPossibleReaders];
 #ifdef JMRIRFID
 WiFiServer wifiserver(jmriRfidPort);     //Make sure JMRI RFID connection is expecting this port
-WiFiClient jmriclient;
+WiFiClient jmrirfidclient;
 #elif defined(JMRIMQTT)
 JMRI jmri[numPossibleReaders];           //Should be equal to number of readers
 WiFiClient brokerclient;
@@ -202,19 +206,27 @@ void setup() {
   //===================================================================================================
 
 #if defined(JMRIRFID) || defined(JMRIMQTT)
-//Connect to WiFii
+  //Connect to WiFii
   Serial.print("** Connecting to Wifi as ");  Serial.print(clientName);  Serial.print("  MAC: "); Serial.println(WiFi.macAddress());
   WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
+  for (uint8_t ii = 0; ii < 10; ii++)  {
+    if (WiFi.status() == WL_CONNECTED) {
+      Serial.println("");
+      Serial.print("** Connected to ");  Serial.print(ssid);  Serial.print("  on IP address: ");  Serial.println(WiFi.localIP());
+      break;
+    }
+    else     {
+      delay(500);
+      Serial.print(".");
+    }
   }
-  Serial.println(""); 
-  Serial.print("** Connected to ");  Serial.print(ssid);  Serial.print("  on IP address: ");  Serial.println(WiFi.localIP());  
+  if (WiFi.status() != WL_CONNECTED) {        //Not connected after 10 trieds
+    ManualReboot();                           //*** REBOOT ESP32 ***
+  }
 #endif
 
 #ifdef JMRIRFID
-  //Start the wifi server to get connection from JMRI
+  //Start the wifi server to get RFID Connection from JMRI (IP:port must match)
   wifiserver.begin(jmriRfidPort);
   Serial.print("** WiFi Server Started, available: ");
   Serial.println(wifiserver.available());
@@ -249,7 +261,7 @@ void loop() {
     if (loopCnt % 1000 == 0)    {             //Periodically put heartbeat to serial output
       Serial.println("DEBUG: " + String(millis()) + " " + String(loopCnt) + ": ");
 #ifdef JMRIRFID
-      Serial.print("  jmriclient.connected: ");  Serial.println(jmriclient.connected());
+      Serial.print("  jmrirfidclient.connected: ");  Serial.println(jmrirfidclient.connected());
 #elif defined(JMRIMQTT)
       Serial.print("  brokerclient.connected: ");  Serial.println(brokerclient.connected());
 #else
@@ -301,4 +313,5 @@ void loop() {
   v03f Code cleanup                                            2023-05-13
   v04  Put RFID Reader functions into structure                2023-05-13
   v04a Put MQTT Publish Topics into an array                   2023-05-14
+  v04b Separate into multiple ino files                        2023-05-17
 */
