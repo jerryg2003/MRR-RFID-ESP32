@@ -79,10 +79,7 @@ const unsigned long veryShortWait  = 6;
 const unsigned long oneMin         = 60 * oneSec;
 
 //*************** Wi-Fi credentials *************************************************
-const char* ssid         = "G2";
-const char* password     = "GrochowFamily";
-const int   jmriRfidPort = 12099;                              //Make sure JMRI RFID connection (if used) set to this port
-const char* clientName   = "ESP32-RFID01-JXTrains";            // known to wireless network
+#include MyWiFiCredentials.h
 
 #ifdef JMRIMQTT
 //*************** MQTT credentials *************************************************
