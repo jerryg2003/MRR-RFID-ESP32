@@ -78,8 +78,8 @@ const unsigned long shortWait      = 12;
 const unsigned long veryShortWait  = 6;
 const unsigned long oneMin         = 60 * oneSec;
 
-//*************** Wi-Fi credentials *************************************************
-#include MyWiFiCredentials.h
+//*************** Wi-Fi and JMRI credentials *************************************************
+#include "MyWiFiCredentials.h"
 
 #ifdef JMRIMQTT
 //*************** MQTT credentials *************************************************
