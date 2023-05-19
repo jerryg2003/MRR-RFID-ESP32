@@ -23,7 +23,7 @@
 
 //***Version History at bottom of file
 
-#define VERSION "*** ESP32RFID 2023-05-17 1330"         //Version info printed during setup
+#define VERSION "*** ESP32RFID 2023-05-19 1330"         //Version info printed during setup
 #define VERSIONNUM "-v04b-"
 #ifdef ESP32
 const char compileDate[] = __DATE__ " " __TIME__;
@@ -78,8 +78,24 @@ const unsigned long shortWait      = 12;
 const unsigned long veryShortWait  = 6;
 const unsigned long oneMin         = 60 * oneSec;
 
-//*************** Wi-Fi and JMRI credentials *************************************************
-#include "MyWiFiCredentials.h"
+//*************** Wi-Fi credentials and Other personal information ***************************************
+# include "MyRFIDPersonalInfo.h" 
+/* FOLLOWING INFORMATION SHOULD BE IN INCLUDED FILE:
+//WiFi
+const char*  ssid               = "XXX";       //WiFi network name
+const char*  password           = "XXX";       //WiFi network password
+const char*  clientName         = "XXX";       // known to wireless network
+//JMRI communication
+const unsigned int jmriRfidPort = nnnn;        //Make sure JMRI RFID connection set to this port, if used
+const String mqttClientID       = "XXX";       //Name assigned to this ESP32 for MQTT, if used {Some MQTT libraries requires char]
+const unsigned int mqttPort     = nnnn;
+const String mqttPresonalPrefix = "XXX";       //Personal prefix applied to mqttChannel for all mqtt topics
+//Microprocessor pin and reader assignments (for however many readers you have)
+const uint8_t SS_Pins[]  = {nn, nn, nn};       //Cannot use ESP32 "output only" pins
+const uint8_t RST_Pins[] = {nn, nn, nn};       //Cannot use pin which is builtin LED (2 for most ESP32s)
+const char    readerID[] = {'A', 'B', 'C'};    //MUST BE A-H or I-P for MERG concentrator (coordinate with JMRI setup)
+const String  readerIDString = "ABC";          //So can find index easily
+*/
 
 #ifdef JMRIMQTT
 //*************** MQTT credentials *************************************************
@@ -87,9 +103,7 @@ uint8_t     mqttBrokerNum   = 0;                               //Keep track of w
 //If broker found, put it in IP[0];  else try other IP addresses
 IPAddress   mqttBrokerIP[]  = {IPAddress(0, 0, 0, 0), IPAddress(10, 0, 0, 3), IPAddress(192, 168, 0, 118), IPAddress(10, 0, 1, 15), IPAddress(192, 168, 0, 121)};
 uint8_t numBrokerIP = 5;
-const String    mqttClientID            = "E32-RFID01";       //Name assigned to this ESP32 for MQTT {Some MQTT libraries requires char]
-const uint      mqttPort                = 1883;
-const String    mqttChannel             = "jxtrains/";        //{Some MQTT libraries requires char]
+const String    mqttChannel             = mqttPersonalPrefix + "trains/";        //{Some MQTT libraries requires char]
 enum  SS_TYPES  {SS_LT, SS_MEM, SS_SENS, SS_REPORT};
 const String    mqttPublishTopics[]     = {"Jrecv/lt/", "Jrecv/mem/", "Jrecv/sens/", "Jrecv/reporter/"};
 const uint8_t   numSubTopics            = 2;
@@ -128,14 +142,8 @@ struct JMRI      {
 
 //********************* RFID READER INFO **************************************************************
 //********************* Define the SS (Slave Select) and RST (Reset) pins for each reader *************
-//*** For reasons not yet understood, ESP32 sensitive to order of the SS pins; some orders will result
-//    in only some RFID cards being found.  05-04-2023 ***
-const uint8_t SS_Pins[]  = {17, 16,  5};       //Cannot use ESP32 "output only" pins
-const uint8_t RST_Pins[] = {15, 15, 15};       //Cannot use pin which is builtin LED (2 for most ESP32s)
 const uint8_t numPossibleReaders = sizeof(SS_Pins) / sizeof(SS_Pins[0]);
 //const int numPossibleReaders = 1;              //FOR TESTING
-const char    readerID[] = {'A', 'B', 'C'};    //MUST BE A-H or I-P for MERG concentrator (coordinate with JMRI setup)
-const String  readerIDString = "ABC";          //So can find index easily
 uint8_t       numDetectedReaders = 0;          //Actually found after self-test
 uint8_t       numCardsFound = 0;               //For FUTURE logging function
 bool          jmriClientPresent = false;       //Is JMRI connected to WiFi for RFID Connection?
@@ -310,5 +318,5 @@ void loop() {
   v03f Code cleanup                                            2023-05-13
   v04  Put RFID Reader functions into structure                2023-05-13
   v04a Put MQTT Publish Topics into an array                   2023-05-14
-  v04b Separate into multiple ino files                        2023-05-17
+  v04b Create include file for personal info                   2023-05-19 
 */
