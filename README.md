@@ -1,7 +1,11 @@
 # MRR-RFID-ESP32
 
-(1)Emulates MERG Concentrator for RFID communication with JMRI over WiFi
-(2)Uses MQTT for RFID communication with JMRI over WiFi
+Two configurations:
+(1)Emulates MERG Concentrator for RFID communication with JMRI over WiFi (setup JMRI RFID Connection)
+(2)Uses MQTT for RFID communication with JMRI over WiFi (setup: JMRI MQTT Connection)
+
+Hardware: ESP32 connected to RC522 RFID reader
+Software: Arduino IDE with ESP32 board libraries.  See additinoal list of included libraries in source code
 
   ** FIRST PUBLIC RELEASE **
   
