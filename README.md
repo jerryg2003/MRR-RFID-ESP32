@@ -11,6 +11,7 @@ For the PN5180 reader:
 (3) TBD: sketch to communicate via MQTT to JMRI. (expected by June 30, 2023)
 
 Hardware:  ESP32-WROOM Development Board (includes WiFi support), either MFRC522 or PN5180 RFID Readers
+
 Software:  Arduino IDE, various libraries (see the list in the sketches), JMRI 
 
   ** FIRST PUBLIC RELEASE **
@@ -21,5 +22,6 @@ Software:  Arduino IDE, various libraries (see the list in the sketches), JMRI
   Distributed subject to license as specified in the Github reposoitory. Code on Github may be modified or withdrawn at any time
 
   Motivated by sketches from Thomas Seitz https://github.com/TMRCI-DEV1/RFID-Concentrators
+
   Copyright (c) 2023 Jerry Grochow
 
