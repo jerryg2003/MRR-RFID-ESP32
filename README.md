@@ -16,7 +16,7 @@ Configurable sketch:
 - Select which type of reader to use (PN5180, RC522, PN532)
 - Select which communications method to use (MQTT, JMRI RFID Connection)
 
-Hardware:  ESP32-WROOM Development Board (includes WiFi support), either MFRC522 or PN5180 RFID Readers
+Hardware:  ESP32-WROOM Development Board (includes WiFi support), either MFRC522, PN532, or PN5180 RFID Readers
 
 Software:  Arduino IDE, various libraries (see the list in the sketches), JMRI 
 
