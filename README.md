@@ -10,6 +10,12 @@ For the PN5180 reader:
 (2) Slightly modified libraries to get this working more effectively with the ESP32
 (3) TBD: sketch to communicate via MQTT to JMRI. (expected by June 30, 2023)
 
+ESP32_RFID-v10p:
+Configurable sketch:
+- Select which layout config to use (your own layout config info, test info, etc.)
+- Select which type of reader to use (PN5180, RC522, PN532)
+- Select which communications method to use (MQTT, JMRI RFID Connection)
+
 Hardware:  ESP32-WROOM Development Board (includes WiFi support), either MFRC522 or PN5180 RFID Readers
 
 Software:  Arduino IDE, various libraries (see the list in the sketches), JMRI 
