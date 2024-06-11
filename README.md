@@ -21,7 +21,9 @@ Hardware:  ESP32-WROOM Development Board (includes WiFi support), either MFRC522
 Software:  Arduino IDE, various libraries (see the list in the sketches), JMRI 
 
   ** V10p: FIRST PUBLIC RELEASE **
+  
   ** V11p: Adds Over-The-Air updating and various other improvements
+  
   Code provided "AS IS" with no warranties! PLEASE DO NOT DISTRIBUTE FURTHER WITHOUT PERMISSION OF AUTHOR
    AS CHANGES MAY BE MADE BY AUTHOR AT ANY TIME.
   
