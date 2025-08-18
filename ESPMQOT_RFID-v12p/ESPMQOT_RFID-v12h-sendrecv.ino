@@ -97,6 +97,7 @@ void MqttHeartbeat ()          {               //Toggle a sensor in JMRI via MQT
 
 void	JMRIMqttHeartBeat () {              //Check for JMRI sending over MQTT
 
+if (JMRIHBDuration == 0) return;             //Not checking for JMRI heartbeat
 if (mainLoopStartTime < (JMRIHBTime + JMRIHBDuration))  return;   //Expect LUB-DUB every 10 minutes
 
 ManualReboot("JMRIMqttHB lost");     //Try rebooting microcontroller
