@@ -13,11 +13,12 @@
 // ***   MAKE SELECTIONS FOLLOWING THESE COMMENTS ***
 
 
-#define VERSION "*** ESP32 MQTT OTA _RFID 2025-02-14-1135"  //Version info printed during setup
+#define VERSION "*** ESP32 MQTT OTA _RFID 2025-08-18-1135"  //Version info printed during setup
 #define VERSIONNUM "-MQOTRF-v12h-"                          //Version number also published via MQTT
 
 //COMMUNICATIONS TO JMRI: Two possible ways to communicate with JMRI, via  "MQTT Connection" and "RFID Connection":
 /* *** Using MQTT Connection to JMRI (uncomment #define JMRIMQTT below):
+       NOTE:  MQTT Topics used are in variables MQTTPublishTopics and MQTTSubscribeTopics; set same in JMRI Preferences
        1. Set up reporter, sensor, and memory for each reader (my current panel v52f or later)
        2. JMRI will automatically create IDTags when it see them
        3. Need to coordinate with JMRI MQTTMemory.jy script (v51 or later)
@@ -26,7 +27,7 @@
            alternatively, directly input IP address of broker in ConfigData or on IDE console
     ** Further instructions for JMRI setup for MQTT communication:
        Define Reporters in JMRI with system name format "[MQTTClientID (see below)]/[ReaderID]"
-         EXAMPLE:   Reporter: [MR]E32-E32-RFID01/L and   and Memory:  (for specific reader)
+         EXAMPLE:   Reporter: [MR]E32-RFID01/L and   and Memory:  (for specific reader)
        Define Sensors in JMRI with system name format "[MQTTClientID/[ReaderID|Suffix]"
          EXAMPLE:   Sensors:  [MS]E32-RFID01/ACK (acknowledge receipt of activate Light)
                     Sensors:  [MS]E32-RFID01/HB  (for receipt of heartbeat)
@@ -37,7 +38,7 @@
          EXAMPLE:   Memory:   [M]M.E32-RFID01/IP (for IP address of this concentrator)
                               [M]M.E32-RFID01/VERS (for version number of this sketch)
                               [M]M.E32-RFID01/L
-                              [M}M,E32-RFID01/L0 (for last tag read on reader L)
+                              [M}M.E32-RFID01/L0 (for last tag read on reader L)
                               [M]M.E32-RFID01/L1 (for loop time on reader L)
    *** Using RFID Connection to JMRI (uncomment #define JMRIRFID below):
          JMRI will automatically set up reporters and sensors and create IDTags as it sees IDTags
@@ -668,5 +669,6 @@ void loop() {
         Change setup blinks to Morse code                       2025-01-23
 				Correct use of numSubTopics                             2025-02-05
         Move 522 PCD_setAntennaGain up (no noticable effect)    2025-02-14
+				Added check for JMRIHBDuration = 0                      2025-08-18
 
 */
